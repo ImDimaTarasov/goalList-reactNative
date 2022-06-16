@@ -1,8 +1,8 @@
-import { StyleSheet, TextInput, View, Button, FlatList } from "react-native";
+import { StyleSheet, TextInput, View, Button, Modal } from "react-native";
 
 import { useState } from "react";
 
-const GoalInput = ({ onAddGoal, onDeleteGoals }) => {
+const GoalInput = ({ onAddGoal, visible, onCloseModal }) => {
 	const [textFromInput, setTextFromInput] = useState("");
 
 	const goalInputHandler = (enteredText) => {
@@ -14,35 +14,48 @@ const GoalInput = ({ onAddGoal, onDeleteGoals }) => {
 		setTextFromInput("");
 	};
 	return (
-		<View style={styles.inputContainer}>
-			<TextInput
-				value={textFromInput}
-				style={styles.textInput}
-				placeholder="Your course goal!"
-				onChangeText={goalInputHandler}
-			/>
-			<Button title="Add goal" onPress={addGoalHandler} />
-			<Button title="Reset" onPress={onDeleteGoals} />
-		</View>
+		<Modal visible={visible} animationType="fade">
+			<View style={styles.inputContainer}>
+				<TextInput
+					value={textFromInput}
+					style={styles.textInput}
+					placeholder="Your course goal!"
+					onChangeText={goalInputHandler}
+				/>
+				<View style={styles.buttonContainer}>
+					<View style={styles.button}>
+						<Button title="Add goal" onPress={addGoalHandler} />
+					</View>
+					<View style={styles.button}>
+						<Button title="Cancel" onPress={onCloseModal} />
+					</View>
+				</View>
+			</View>
+		</Modal>
 	);
 };
 
 const styles = StyleSheet.create({
 	inputContainer: {
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "space-between",
+		justifyContent: "center",
 		alignItems: "center",
 		marginBottom: 24,
-		borderBottomWidth: 1,
-		borderBottomColor: "#cccccc",
 	},
 	textInput: {
 		borderWidth: 1,
 		borderColor: "#cccccc",
-		width: "50%",
-		marginRight: 8,
+		width: "90%",
+		marginBottom: 20,
 		padding: 8,
+	},
+	buttonContainer: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		width: "80%",
+	},
+	button: {
+		width: 100,
 	},
 });
 

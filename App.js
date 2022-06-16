@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 
 import { useState } from "react";
 
@@ -6,6 +6,7 @@ import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
 const App = () => {
+	const [modalIsVisible, setModalIsVisible] = useState(false);
 	const [courseGoals, setCourseGoals] = useState([]);
 
 	const addGoalHandler = (enteredGoalText) => {
@@ -13,7 +14,10 @@ const App = () => {
 			...currentCourseGoals,
 			{ text: enteredGoalText, id: Math.random().toString() },
 		]);
+		//Close the modal after adding a goal to the list
+		setModalIsVisible(false);
 	};
+
 	const deleteGoalsHandler = (id) => {
 		setCourseGoals((currentCourseGoals) => {
 			return currentCourseGoals.filter((goal) => goal.id !== id);
@@ -22,7 +26,16 @@ const App = () => {
 
 	return (
 		<View style={styles.appContainer}>
-			<GoalInput onAddGoal={addGoalHandler} />
+			<Button
+				title="Add New Goal"
+				color="blue"
+				onPress={() => setModalIsVisible(true)}
+			/>
+			<GoalInput
+				visible={modalIsVisible}
+				onAddGoal={addGoalHandler}
+				onCloseModal={() => setModalIsVisible(false)}
+			/>
 			<View style={styles.goalsContainer}>
 				<FlatList
 					data={courseGoals}
