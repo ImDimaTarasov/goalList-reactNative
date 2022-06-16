@@ -14,22 +14,25 @@ const App = () => {
 			{ text: enteredGoalText, id: Math.random().toString() },
 		]);
 	};
-	const deleteGoalsHandler = () => {
-		setCourseGoals([]);
+	const deleteGoalsHandler = (id) => {
+		setCourseGoals((currentCourseGoals) => {
+			return currentCourseGoals.filter((goal) => goal.id !== id);
+		});
 	};
 
 	return (
 		<View style={styles.appContainer}>
-			<GoalInput
-				onAddGoal={addGoalHandler}
-				onDeleteGoals={deleteGoalsHandler}
-			/>
+			<GoalInput onAddGoal={addGoalHandler} />
 			<View style={styles.goalsContainer}>
 				<FlatList
 					data={courseGoals}
-					renderItem={(itemData) => {
-						return <GoalItem text={itemData.item.text} />;
-					}}
+					renderItem={(itemData) => (
+						<GoalItem
+							text={itemData.item.text}
+							onDeleteItem={deleteGoalsHandler}
+							id={itemData.item.id}
+						/>
+					)}
 					keyExtractor={(item) => item.id}
 					alwaysBounceVertical={false}
 				/>
